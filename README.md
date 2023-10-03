@@ -9,7 +9,10 @@
 
 # Getting Started with ez-opendata
 
-ez-opendata is a set of simple javascript functions to call open-data sources such as openstreetmap, wikipedia or wikimedia.
+`ez-opendata` is a set of ez (easy) to use javascript functions to call open-data sources such as openstreetmap, wikipedia or wikimedia.
+It is tiny and has no dependencies.
+
+It can work for javascript and/or typescript projects on the broswer or with nodej.
 
 You can sponsor this library at [GitHub Sponsors](https://github.com/sponsors/tbo47).
 
@@ -21,6 +24,7 @@ If you just want to give it a quick try on your typescript project, just copy an
 
 ## Examples
 
+Only basic examples are shown here. Read [test.mjs](./test.mjs) to see more advanced use cases in action.
 ### Openstreetmap
 
 Demo found here: https://tbo47.github.io/poi/
@@ -45,6 +49,7 @@ const southWest = { lat: 14.67, lng: -17.47 };
 const images = await wikimediaQuery(northEast, southWest);
 ```
 
+Get thumb urls for an image.
 ```javascript
 const pageId = 21900832
 const thumbWidth = 400 // 400px
@@ -56,5 +61,5 @@ const imageDetails = wikimediaInfo(pageId, thumbWidth)
 Demo here: https://tbo47.github.io/wikipedia/
 
 ```javascript
- const articles = wikipediaQuery(14.7, -17.4)
+ const articles = wikipediaQuery(14.7, -17.4) // lattitude longitude
 ```
