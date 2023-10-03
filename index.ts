@@ -1,4 +1,7 @@
-// Description: A library to query open data sources (wikipedia, openstreetmap, wikimedia...).
+/**
+ * Description: A library to query open data sources (wikipedia, openstreetmap, wikimedia...).
+ * https://github.com/tbo47/ez-opendata
+ */
 
 /**
  * Query an openstreetmap server to fetch POIs

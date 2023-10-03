@@ -1,10 +1,23 @@
+<p align="center">
+  <a href="https://www.npmjs.com/ez-opendata">
+    <img src="https://img.shields.io/npm/v/ez-opendata.svg?logo=npm&logoColor=fff&label=NPM+package&color=limegreen" alt="ez-opendata on npm" />
+  </a>&nbsp;
+  <a href="https://www.npmjs.com/ez-opendata">
+    <img src="https://img.shields.io/npm/dw/ez-opendata.svg?logo=npm&logoColor=fff&label=NPM+package&color=limegreen" alt="ez-opendata on npm" />
+  </a>&nbsp;
+</p>
+
 # Getting Started with ez-opendata
 
 ez-opendata is a set of simple javascript functions to call open-data sources such as openstreetmap, wikipedia or wikimedia.
 
+You can sponsor this library at [GitHub Sponsors](https://github.com/sponsors/tbo47).
+
 ## Install
 
 `npm install --save ez-opendata`
+
+If you just want to give it a quick try on your typescript project, just copy and paste `index.ts` in your project and rename it `ez-opendata.ts`.
 
 ## Examples
 
@@ -36,4 +49,12 @@ const images = await wikimediaQuery(northEast, southWest);
 const pageId = 21900832
 const thumbWidth = 400 // 400px
 const imageDetails = wikimediaInfo(pageId, thumbWidth)
+```
+
+### Wikipedia
+
+Demo here: https://tbo47.github.io/wikipedia/
+
+```javascript
+ const articles = wikipediaQuery(14.7, -17.4)
 ```
