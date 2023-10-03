@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsc --build tsconfig.json --declaration --watch",
-    "prepublishOnly": "tsc --build tsconfig.json --declaration",
+    "prepublishOnly": "tsc --build tsconfig.json --declaration && npm test",
     "test": "node test.mjs"
   },
   "keywords": [
