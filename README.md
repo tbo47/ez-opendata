@@ -24,7 +24,7 @@ If you just want to give it a quick try on your typescript project, just copy an
 
 ## Examples
 
-Only basic examples are shown here. Read [test.mjs](./test.mjs) to see more advanced use cases in action.
+Only basic examples are shown here. Read [test.mjs](./test.mjs) to see more advanced examples.
 ### Openstreetmap
 
 Demo here: https://tbo47.github.io/poi/
