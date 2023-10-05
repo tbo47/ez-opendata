@@ -37,7 +37,9 @@ export const openstreetmapGetPOIs = async (bbox: string, categories: any[]) => {
         p = { ...p, ...p.tags } // merge the tags object into the main one
         delete p.tags
         const type = p.members ? 'relation' : p.type
-        if (!p.website && p[`contact:website`]) p.website = p[`contact:website`]
+        if (!p.website && p[`contact:website`]) {
+            p.website = p[`contact:website`]
+        }
         p.osm_url = `https://www.openstreetmap.org/${type}/${p.id}`
         p.osm_url_edit = `https://www.openstreetmap.org/edit?${type}=${p.id}`
         return p
@@ -121,7 +123,7 @@ export const wikidataQuery = async (northEast: { lat: number; lng: number; }, so
     // console.log('https://query.wikidata.org/#' + encodeURI(q))
     const r = await fetch(b + encodeURI(q))
     const d = await r.json()
-    return d.results.bindings
+    return d.results.bindings || []
 }
 
 
@@ -130,7 +132,11 @@ export const wikimediaQuery = async (northEast: { lat: number; lng: number; }, s
     const q = `${r}?action=query&list=geosearch&gsbbox=${northEast.lat}%7C${southWest.lng}%7C${southWest.lat}%7C${northEast.lng}&gsnamespace=6&gslimit=${limit}&format=json&origin=*`
     const res = await fetch(q)
     const d = await res.json()
-    return d.query.geosearch
+    if (d.error) {
+        return Promise.reject(d.error)
+    } else {
+        return d.query.geosearch || []
+    }
 }
 
 
