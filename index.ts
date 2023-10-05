@@ -141,15 +141,25 @@ export const wikimediaQuery = async (northEast: { lat: number; lng: number; }, s
 
 
 /*
- *
+ * https://www.mediawiki.org/wiki/API:Imageinfo
  */
 export const wikimediaInfoMultiplePages = async (pageids: number[], thumbWidth = 600) => {
     const pageidsStr = pageids.join('|')
     const r = 'https://commons.wikimedia.org/w/api.php'
-    const q = `${r}?action=query&pageids=${pageidsStr}&prop=imageinfo&iiprop=extmetadata|url&format=json&origin=*&iiurlwidth=${thumbWidth}`
+    const q = `${r}?action=query&pageids=${pageidsStr}&prop=imageinfo&iiprop=extmetadata|url&iiurlwidth=${thumbWidth}&format=json&origin=*`
     const res = await fetch(q)
     const d = await res.json()
     return d.query.pages
+}
+
+export const wikimediaGetAuthor = async (title: string, pageid: number) => {
+    const res = await fetch(`https://commons.wikimedia.org/w/api.php?action=query&titles=${title}&prop=imageinfo&format=json&origin=*`)
+    const d = await res.json()
+    return d.query.pages[pageid].imageinfo[0].user
+}
+
+export const wikimediaGetAuthorLink = (name: string, limit = 40) => {
+    return `https://commons.wikimedia.org/wiki/Special:ListFiles?limit=${limit}&user=${name}`
 }
 
 /*
@@ -163,7 +173,8 @@ export const wikimediaInfo = async (pageid: number, thumbWidth = 600) => {
     const categories = info.extmetadata.Categories.value
     const description = info.extmetadata.ImageDescription.value
     const artistHtml = info.extmetadata.Artist.value
-    return { name, date, categories, description, artistHtml, ...info }
+    const title = infos[pageid].title
+    return { name, date, categories, description, artistHtml, title, ...info }
 }
 
 /*
