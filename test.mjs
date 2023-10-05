@@ -1,3 +1,8 @@
+/**
+ * https://github.com/tbo47/ez-opendata
+ * 
+ * Run `node test.mjs` to test the functions.
+ */
 import { openstreetmapGetPOIs, wikimediaInfo, wikimediaQuery } from './index.js';
 
 const okEmoji = '👍';

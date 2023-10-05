@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsc --build tsconfig.json --declaration --watch",
+    "clean": "rm -rf index.js index.d.ts package-lock.json node_modules ; ncu -u ; npm i",
     "prepublishOnly": "tsc --build tsconfig.json --declaration && npm test",
-    "test": "node test.mjs"
+    "test": "tsc --build tsconfig.test.json && node test.mjs"
   },
   "keywords": [
     "wikipedia",
