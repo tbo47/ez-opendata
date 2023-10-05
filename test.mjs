@@ -3,9 +3,15 @@
  * 
  * Run `node test.mjs` to test the functions.
  */
-import { openstreetmapGetPOIs, wikimediaInfo, wikimediaQuery } from './index.js';
+import { openstreetmapGetPOIs, wikimediaInfo, wikimediaQuery, wikimediaPicOfTheDay } from './index.js';
 
 const okEmoji = '👍';
+
+{
+    const images = await wikimediaPicOfTheDay('fr')
+    if (images.length === 0) throw new Error('No images found. The wikimedia API may be down.');
+    console.log(`${okEmoji} wikimediaPicOfTheDay passed`);
+}
 
 {
     const northEast = { lat: 14.71, lng: -17.41 };
@@ -19,7 +25,7 @@ const okEmoji = '👍';
     const pageId = images[0].pageid
     const thumbWidth = 400 // 400px
     const imageDetails = await wikimediaInfo(pageId, thumbWidth)
-    if(!imageDetails.name) throw new Error('The name is expected here.');
+    if (!imageDetails.name) throw new Error('The name is expected here.');
     console.log(`${okEmoji} wikimediaInfo passed`);
 }
 

@@ -12,7 +12,7 @@
 `ez-opendata` is a set of ez (easy) to use javascript functions to call open-data sources such as openstreetmap, wikipedia or wikimedia.
 It is tiny and has no dependencies.
 
-It can work for javascript and/or typescript projects on the broswer or with nodej.
+It can work for javascript and/or typescript projects on the browser or with nodejs.
 
 You can sponsor this library at [GitHub Sponsors](https://github.com/sponsors/tbo47).
 
@@ -27,7 +27,7 @@ If you just want to give it a quick try on your typescript project, just copy an
 Only basic examples are shown here. Read [test.mjs](./test.mjs) to see more advanced use cases in action.
 ### Openstreetmap
 
-Demo found here: https://tbo47.github.io/poi/
+Demo here: https://tbo47.github.io/poi/
 
 ```javascript
 const cafeAndRestaurants = await openstreetmapGetPOIs(

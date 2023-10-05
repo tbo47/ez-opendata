@@ -165,3 +165,38 @@ export const wikimediaInfo = async (pageid: number, thumbWidth = 600) => {
     const artistHtml = info.extmetadata.Artist.value
     return { name, date, categories, description, artistHtml, ...info }
 }
+
+/*
+ * Return the browser language or 'en' if not found.
+ * This will not work in nodejs, only for the browser.
+ */
+const getLang = () => {
+    return window?.navigator?.language?.split('-')?.at(0) || 'en'
+}
+
+
+/**
+ * Get the picture of the day from wikimedia commons.
+ * 
+ * Leave lang empty to use the browser language. Set it to 'en' for example to force english.
+ * You will have to set the lang if you use nodejs.
+ */
+export const wikimediaPicOfTheDay = async (lang = '') => {
+    if (!lang) { lang = getLang() }
+    const url = `https://commons.wikimedia.org/w/api.php?action=featuredfeed&feed=potd&feedformat=atom&language=${lang}&origin=*`
+    const match1 = 'href="https://commons.wikimedia.org/wiki/Special'
+    const match2 = 'typeof="mw:File"'
+    const raw = await fetch(url)
+    const text = await raw.text();
+    // const xml = new window.DOMParser().parseFromString(text, 'text/xml'); // doesn't work for nodejs
+    const urls = text.split(/\n/).filter(l => l.includes(match1)).map(l => l.split(/"/)[5])
+    return urls
+    // TODO to be continued
+    const lastUrl = urls.slice(-1)[0]
+    console.log(lastUrl)
+    const raw2 = await fetch(lastUrl, { mode: 'no-cors', redirect: 'follow', headers: { 'Content-Type': 'text/html' }, referrer: 'no-referrer' })
+    const text2 = await raw2.text()
+    const picUrl = text2.split(/\n/).filter(l => l.includes(match2)).map(l => l.split(/"/)[7])
+    const picName = picUrl[0].slice(11)
+    return picName;
+};

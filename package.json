@@ -1,11 +1,12 @@
 {
   "name": "ez-opendata",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Wrap open-data sources (wikipedia, openstreetmap, wikimedia, etc...) calls in simple javascript functions.",
   "main": "index.js",
   "scripts": {
     "dev": "tsc --build tsconfig.json --declaration --watch",
     "prepublishOnly": "npm test && tsc --build tsconfig.json --declaration",
+    "test_dev": "rm index.js; tsc --build tsconfig.test.json --watch ; rm index.js",
     "test": "rm index.js; tsc --build tsconfig.test.json && node test.mjs ; rm index.js"
   },
   "keywords": [
