@@ -39,7 +39,7 @@ const cafeAndRestaurants = await openstreetmapGetPOIs(
 );
 ```
 
-### Wikimedia
+### Wikimedia Commons 
 
 Demo here: https://tbo47.github.io/wikimedia/
 
