@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "tsc --build tsconfig.json --declaration --watch",
     "prepublishOnly": "npm test && tsc --build tsconfig.json --declaration",
-    "test_dev": "rm index.js; tsc --build tsconfig.test.json --watch ; rm index.js",
-    "test": "rm index.js; tsc --build tsconfig.test.json && node test.mjs ; rm index.js"
+    "test_dev": "rm -f index.js; tsc --build tsconfig.test.json --watch ; rm index.js",
+    "test": "rm -f index.js; tsc --build tsconfig.test.json && node test.mjs ; rm index.js"
   },
   "keywords": [
     "wikipedia",
@@ -19,7 +19,7 @@
   ],
   "author": "tbo47",
   "license": "MIT",
-  "dependencies": {
+  "devDependencies": {
     "typescript": "^5.2.2"
   }
 }

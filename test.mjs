@@ -5,12 +5,12 @@
  */
 import { openstreetmapGetPOIs, wikimediaInfo, wikimediaQuery, wikimediaPicOfTheDay } from './index.js';
 
-const okEmoji = '👍';
+const okEmoji = '✅';
 
 {
     const images = await wikimediaPicOfTheDay('fr')
     if (images.length === 0) throw new Error('No images found. The wikimedia API may be down.');
-    console.log(`${okEmoji} wikimediaPicOfTheDay passed`);
+    console.log(`${okEmoji} wikimediaPicOfTheDay`);
 }
 
 {
@@ -20,13 +20,13 @@ const okEmoji = '👍';
     const images = await wikimediaQuery(northEast, southWest, limit);
     if (images.length === 0) throw new Error('No images found. The wikimedia API may be down.');
     if (images.length !== limit) throw new Error('Not the amount of images expected. The wikimedia API may be down.');
-    console.log(`${okEmoji} wikimediaQuery passed`);
+    console.log(`${okEmoji} wikimediaQuery`);
 
     const pageId = images[0].pageid
     const thumbWidth = 400 // 400px
     const imageDetails = await wikimediaInfo(pageId, thumbWidth)
     if (!imageDetails.name) throw new Error('The name is expected here.');
-    console.log(`${okEmoji} wikimediaInfo passed`);
+    console.log(`${okEmoji} wikimediaInfo`);
 }
 
 
@@ -39,5 +39,5 @@ const okEmoji = '👍';
         ]
     );
     if (POIs.length === 0) throw new Error('No POIs found. The openstreetmap API may be down.');
-    console.log(`${okEmoji} openstreetmapGetPOIs passed`);
+    console.log(`${okEmoji} openstreetmapGetPOIs`);
 }

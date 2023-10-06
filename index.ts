@@ -3,6 +3,17 @@
  * https://github.com/tbo47/ez-opendata
  */
 
+export interface OpenstreetmapPoi {
+    members: any;
+    type: any;
+    website: any;
+    osm_url: string;
+    id: any;
+    osm_url_edit: string;
+    tags?: any;
+    [key: string]: any;
+}
+
 /**
  * Query an openstreetmap server to fetch POIs
  * 
@@ -33,7 +44,7 @@ export const openstreetmapGetPOIs = async (bbox: string, categories: any[]) => {
 
     const response = await fetch(url, { method: 'POST', body })
     const data = await response.json()
-    return data.elements.filter((p: any) => p.tags).map((p: any) => {
+    return data.elements.filter((p: any) => p.tags).map((p: OpenstreetmapPoi) => {
         p = { ...p, ...p.tags } // merge the tags object into the main one
         delete p.tags
         const type = p.members ? 'relation' : p.type
@@ -87,7 +98,7 @@ export const extractDiets = (pois: any[]) => {
     return dietsSorted
 }
 
-export interface WikipediaQueryType { title: string, lat: number, lon: number, url: string, dist: string, pageid: string }
+export interface WikipediaArticle { title: string, lat: number, lon: number, url: string, dist: string, pageid: string }
 
 /**
  * Return the wikipedia articles around a given location.
@@ -97,11 +108,13 @@ export const wikipediaQuery = async (lat = 37, lon = -122, language = 'en', radi
     const u = `${b}?action=query&list=geosearch&gscoord=${lat}%7C${lon}&gsradius=${radius}&gslimit=${limit}&origin=*&format=json`
     const r = await fetch(u)
     const d = await r.json()
-    return d.query.geosearch.map((a: WikipediaQueryType) => {
+    return (d.query.geosearch as WikipediaArticle[]).map(a => {
         a.url = `https://${language}.wikipedia.org/wiki/${a.title}`
         return a
     })
 }
+
+export interface WikidataArticle { image: any, location: any, q: any, qLabel: any, commonscat?: any }
 
 export const wikidataQuery = async (northEast: { lat: number; lng: number; }, southWest: { lat: number; lng: number; }, limit = 3000) => {
     const b = 'https://query.wikidata.org/bigdata/namespace/wdq/sparql?format=json&query='
@@ -123,9 +136,13 @@ export const wikidataQuery = async (northEast: { lat: number; lng: number; }, so
     // console.log('https://query.wikidata.org/#' + encodeURI(q))
     const r = await fetch(b + encodeURI(q))
     const d = await r.json()
-    return d.results.bindings || []
+    return (d.results.bindings || []) as WikidataArticle[]
 }
 
+/**
+ * the title is the uniq identifyer
+ */
+export interface WikimediaItem { dist: number, lat:number, lon: number, ns: number, pageid: number, primary: string, title: string}
 
 export const wikimediaQuery = async (northEast: { lat: number; lng: number; }, southWest: { lat: number; lng: number; }, limit = 100) => {
     const r = 'https://commons.wikimedia.org/w/api.php'
@@ -135,7 +152,7 @@ export const wikimediaQuery = async (northEast: { lat: number; lng: number; }, s
     if (d.error) {
         return Promise.reject(d.error)
     } else {
-        return d.query.geosearch || []
+        return (d.query.geosearch || []) as WikimediaItem[]
     }
 }
 
