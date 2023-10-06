@@ -219,7 +219,7 @@ export const wikimediaPicOfTheDay = async (lang = '') => {
     // const xml = new window.DOMParser().parseFromString(text, 'text/xml'); // doesn't work for nodejs
     const urls = text.split(/\n/).filter(l => l.includes(match1)).map(l => l.split(/"/)[5])
     return urls
-    // TODO to be continued
+    /*
     const lastUrl = urls.slice(-1)[0]
     console.log(lastUrl)
     const raw2 = await fetch(lastUrl, { mode: 'no-cors', redirect: 'follow', headers: { 'Content-Type': 'text/html' }, referrer: 'no-referrer' })
@@ -227,4 +227,5 @@ export const wikimediaPicOfTheDay = async (lang = '') => {
     const picUrl = text2.split(/\n/).filter(l => l.includes(match2)).map(l => l.split(/"/)[7])
     const picName = picUrl[0].slice(11)
     return picName;
+    */
 };
