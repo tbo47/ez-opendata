@@ -78,19 +78,22 @@ export const getFoodShops = async ({ _northEast, _southWest }: { _northEast: { l
 }
 
 // extract diets from POIs (only makes sense for restaurants)
-export const extractDiets = (pois: any[]) => {
-    const dietsMap = new Map() // stores ['thai': 3] if thai restaurants have been seen 3 times
+export const extractDiets = (pois: OpenstreetmapPoi[]) => {
+    const dietsMap = new Map<string, number>() // stores ['thai': 3] if thai restaurants have been seen 3 times
     pois.forEach(poi => {
-        const diets = new Set()
+        const diets = new Set<string>()
         // extract poi.cuisine
         poi.cuisine?.split(`;`)?.forEach((c: string) => diets.add(c?.trim()?.toLowerCase()))
         // extract poi.diet:thai == yes for example
         Object.keys(poi)
             .filter(key => key.startsWith(`diet`) && poi[key] === `yes`)
-            .forEach(key => diets.add(key.split(`:`).at(1)))
+            .forEach(key => {
+                const diet = key.split(`:`).at(1)
+                if (diet) diets.add(diet)
+            })
 
         diets.forEach(diet => {
-            if (dietsMap.has(diet)) dietsMap.set(diet, dietsMap.get(diet) + 1)
+            if (dietsMap.has(diet)) dietsMap.set(diet, dietsMap.get(diet)! + 1)
             else dietsMap.set(diet, 1)
         })
     })
@@ -114,7 +117,7 @@ export const wikipediaQuery = async (lat = 37, lon = -122, language = 'en', radi
     })
 }
 
-export interface WikidataArticle { image: any, location: any, q: any, qLabel: any, commonscat?: any }
+export interface WikidataArticle { id: string, lat: number, lng: number, image: { type: string, value: string }, location: any, q: any, qLabel: any, commonscat?: any }
 
 export const wikidataQuery = async (northEast: { lat: number; lng: number; }, southWest: { lat: number; lng: number; }, limit = 3000) => {
     const b = 'https://query.wikidata.org/bigdata/namespace/wdq/sparql?format=json&query='
@@ -136,13 +139,20 @@ export const wikidataQuery = async (northEast: { lat: number; lng: number; }, so
     // console.log('https://query.wikidata.org/#' + encodeURI(q))
     const r = await fetch(b + encodeURI(q))
     const d = await r.json()
-    return (d.results.bindings || []) as WikidataArticle[]
+    const items = d.results.bindings || [] as WikidataArticle[]
+    items.forEach((i: WikidataArticle) => {
+        i.id = i.qLabel.value
+        const [lng, lat] = i.location?.value?.slice(6, -1).split(' ').map((s: string) => parseFloat(s))
+        i.lat = lat
+        i.lng = lng
+    })
+    return items
 }
 
 /**
  * the title is the uniq identifyer
  */
-export interface WikimediaItem { dist: number, lat:number, lon: number, ns: number, pageid: number, primary: string, title: string}
+export interface WikimediaItem { dist: number, lat: number, lon: number, ns: number, pageid: number, primary: string, title: string }
 
 export const wikimediaQuery = async (northEast: { lat: number; lng: number; }, southWest: { lat: number; lng: number; }, limit = 100) => {
     const r = 'https://commons.wikimedia.org/w/api.php'
