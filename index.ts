@@ -154,6 +154,10 @@ export const wikidataQuery = async (northEast: { lat: number; lng: number; }, so
  */
 export interface WikimediaItem { dist: number, lat: number, lon: number, ns: number, pageid: number, primary: string, title: string }
 
+export const wikimediaQueryBound = async (bounds: any, limit = 5000) => {
+    return await wikimediaQuery(bounds.getNorthEast(), bounds.getSouthWest(), limit)
+}
+
 export const wikimediaQuery = async (northEast: { lat: number; lng: number; }, southWest: { lat: number; lng: number; }, limit = 100) => {
     const r = 'https://commons.wikimedia.org/w/api.php'
     const q = `${r}?action=query&list=geosearch&gsbbox=${northEast.lat}%7C${southWest.lng}%7C${southWest.lat}%7C${northEast.lng}&gsnamespace=6&gslimit=${limit}&format=json&origin=*`
