@@ -49,12 +49,21 @@ const southWest = { lat: 14.67, lng: -17.47 };
 const images = await wikimediaQuery(northEast, southWest);
 ```
 
-Get thumb urls for an image.
+Get a thumb which fits in a 100px by 100px box:
 ```javascript
 const pageId = 21900832
-const thumbWidth = 400 // 400px
-const imageDetails = wikimediaInfo(pageId, thumbWidth)
+const height = 100 
+const with = 100
+const { thumburl } = await wikimediaGetThumb(pageid, height, width)
 ```
+
+Get a thumb to fit in a <div> element:
+```javascript
+const pageId = 21900832
+const { height, width } = document.getElementById('my-div').getBoundingClientRect()
+const { thumburl } = await wikimediaGetThumb(pageid, height, width)
+```
+
 
 ### Wikipedia
 
