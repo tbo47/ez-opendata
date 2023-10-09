@@ -3,35 +3,37 @@
  * https://github.com/tbo47/ez-opendata
  */
 
+export const WIKI_COMMONS = 'https://commons.wikimedia.org/w/api.php'
+
 export interface OpenstreetmapPoi {
-    members: any;
-    type: any;
-    website: any;
-    osm_url: string;
-    id: any;
-    osm_url_edit: string;
-    tags?: any;
-    [key: string]: any;
+    members: any
+    type: any
+    website: any
+    osm_url: string
+    id: any
+    osm_url_edit: string
+    tags?: any
+    [key: string]: any
 }
 
 /**
  * Query an openstreetmap server to fetch POIs
- * 
+ *
  * @param {*} bbox the rectangle where to perform the query
  * @param {Array.<Array>} categories of pois. Like restaurant, cafe...
  * @returns Promise<Poi[]>
  */
 export const openstreetmapGetPOIs = async (bbox: string, categories: any[]) => {
-    const url = 'https://overpass-api.de/api/interpreter';
+    const url = 'https://overpass-api.de/api/interpreter'
 
-    let quest = '';
+    let quest = ''
     categories.forEach(([key, value]) => {
         const p = `
           node["${key}"="${value}"](${bbox});
           way["${key}"="${value}"](${bbox});
-          relation["${key}"="${value}"](${bbox});`;
-        quest += p;
-    });
+          relation["${key}"="${value}"](${bbox});`
+        quest += p
+    })
 
     const body = `
         [out:json][timeout:25];
@@ -40,38 +42,55 @@ export const openstreetmapGetPOIs = async (bbox: string, categories: any[]) => {
         );
         out body;
         >;
-        out skel qt;`;
+        out skel qt;`
 
     const response = await fetch(url, { method: 'POST', body })
     const data = await response.json()
-    return data.elements.filter((p: any) => p.tags).map((p: OpenstreetmapPoi) => {
-        p = { ...p, ...p.tags } // merge the tags object into the main one
-        delete p.tags
-        const type = p.members ? 'relation' : p.type
-        if (!p.website && p[`contact:website`]) {
-            p.website = p[`contact:website`]
-        }
-        p.osm_url = `https://www.openstreetmap.org/${type}/${p.id}`
-        p.osm_url_edit = `https://www.openstreetmap.org/edit?${type}=${p.id}`
-        return p
-    })
+    return data.elements
+        .filter((p: any) => p.tags)
+        .map((p: OpenstreetmapPoi) => {
+            p = { ...p, ...p.tags } // merge the tags object into the main one
+            delete p.tags
+            const type = p.members ? 'relation' : p.type
+            if (!p.website && p[`contact:website`]) {
+                p.website = p[`contact:website`]
+            }
+            p.osm_url = `https://www.openstreetmap.org/${type}/${p.id}`
+            p.osm_url_edit = `https://www.openstreetmap.org/edit?${type}=${p.id}`
+            return p
+        })
 }
 
 /**
- * 
+ *
  * @returns Promise<POI[]> restaurants and cafes
  */
 export const openstreetmapGetRestaurants = () => {
-    return openstreetmapGetPOIs('37.8,-122.3,37.8,-122.2', [{ key: 'amenity', value: 'cafe' }, { key: 'amenity', value: 'restaurant' }])
+    return openstreetmapGetPOIs('37.8,-122.3,37.8,-122.2', [
+        { key: 'amenity', value: 'cafe' },
+        { key: 'amenity', value: 'restaurant' },
+    ])
 }
 
-export const getFoodShops = async ({ _northEast, _southWest }: { _northEast: { lat: number; lng: number; }; _southWest: { lat: number; lng: number; }; }) => {
+export const getFoodShops = async ({
+    _northEast,
+    _southWest,
+}: {
+    _northEast: { lat: number; lng: number }
+    _southWest: { lat: number; lng: number }
+}) => {
     const bbox = []
     bbox.push(_southWest.lat)
     bbox.push(_southWest.lng)
     bbox.push(_northEast.lat)
     bbox.push(_northEast.lng)
-    let categories = [['amenity', 'cafe'], ['amenity', 'restaurant'], ['shop', 'deli'], ['amenity', 'ice_cream'], ['amenity', 'fast_food']]
+    let categories = [
+        ['amenity', 'cafe'],
+        ['amenity', 'restaurant'],
+        ['shop', 'deli'],
+        ['amenity', 'ice_cream'],
+        ['amenity', 'fast_food'],
+    ]
     // categories = [['leisure', 'park'], ['leisure', 'swimming_pool']]
     const pois = await openstreetmapGetPOIs(bbox.join(','), categories)
     return pois
@@ -80,19 +99,19 @@ export const getFoodShops = async ({ _northEast, _southWest }: { _northEast: { l
 // extract diets from POIs (only makes sense for restaurants)
 export const extractDiets = (pois: OpenstreetmapPoi[]) => {
     const dietsMap = new Map<string, number>() // stores ['thai': 3] if thai restaurants have been seen 3 times
-    pois.forEach(poi => {
+    pois.forEach((poi) => {
         const diets = new Set<string>()
         // extract poi.cuisine
         poi.cuisine?.split(`;`)?.forEach((c: string) => diets.add(c?.trim()?.toLowerCase()))
         // extract poi.diet:thai == yes for example
         Object.keys(poi)
-            .filter(key => key.startsWith(`diet`) && poi[key] === `yes`)
-            .forEach(key => {
+            .filter((key) => key.startsWith(`diet`) && poi[key] === `yes`)
+            .forEach((key) => {
                 const diet = key.split(`:`).at(1)
                 if (diet) diets.add(diet)
             })
 
-        diets.forEach(diet => {
+        diets.forEach((diet) => {
             if (dietsMap.has(diet)) dietsMap.set(diet, dietsMap.get(diet)! + 1)
             else dietsMap.set(diet, 1)
         })
@@ -101,7 +120,14 @@ export const extractDiets = (pois: OpenstreetmapPoi[]) => {
     return dietsSorted
 }
 
-export interface WikipediaArticle { title: string, lat: number, lon: number, url: string, dist: string, pageid: string }
+export interface WikipediaArticle {
+    title: string
+    lat: number
+    lon: number
+    url: string
+    dist: string
+    pageid: string
+}
 
 /**
  * Return the wikipedia articles around a given location.
@@ -111,15 +137,28 @@ export const wikipediaQuery = async (lat = 37, lon = -122, language = 'en', radi
     const u = `${b}?action=query&list=geosearch&gscoord=${lat}%7C${lon}&gsradius=${radius}&gslimit=${limit}&origin=*&format=json`
     const r = await fetch(u)
     const d = await r.json()
-    return (d.query.geosearch as WikipediaArticle[]).map(a => {
+    return (d.query.geosearch as WikipediaArticle[]).map((a) => {
         a.url = `https://${language}.wikipedia.org/wiki/${a.title}`
         return a
     })
 }
 
-export interface WikidataArticle { id: string, lat: number, lng: number, image: { type: string, value: string }, location: any, q: any, qLabel: any, commonscat?: any }
+export interface WikidataArticle {
+    id: string
+    lat: number
+    lng: number
+    image: { type: string; value: string }
+    location: any
+    q: any
+    qLabel: any
+    commonscat?: any
+}
 
-export const wikidataQuery = async (northEast: { lat: number; lng: number; }, southWest: { lat: number; lng: number; }, limit = 3000) => {
+export const wikidataQuery = async (
+    northEast: { lat: number; lng: number },
+    southWest: { lat: number; lng: number },
+    limit = 3000
+) => {
     const b = 'https://query.wikidata.org/bigdata/namespace/wdq/sparql?format=json&query='
     const q = `SELECT ?q ?qLabel ?location ?image ?reason ?desc ?commonscat WHERE {
                   SERVICE wikibase:box {
@@ -139,10 +178,13 @@ export const wikidataQuery = async (northEast: { lat: number; lng: number; }, so
     // console.log('https://query.wikidata.org/#' + encodeURI(q))
     const r = await fetch(b + encodeURI(q))
     const d = await r.json()
-    const items = d.results.bindings || [] as WikidataArticle[]
+    const items = d.results.bindings || ([] as WikidataArticle[])
     items.forEach((i: WikidataArticle) => {
         i.id = i.qLabel.value
-        const [lng, lat] = i.location?.value?.slice(6, -1).split(' ').map((s: string) => parseFloat(s))
+        const [lng, lat] = i.location?.value
+            ?.slice(6, -1)
+            .split(' ')
+            .map((s: string) => parseFloat(s))
         i.lat = lat
         i.lng = lng
     })
@@ -152,15 +194,26 @@ export const wikidataQuery = async (northEast: { lat: number; lng: number; }, so
 /**
  * the title is the uniq identifyer
  */
-export interface WikimediaItem { dist: number, lat: number, lon: number, ns: number, pageid: number, primary: string, title: string }
+export interface WikimediaItem {
+    dist: number
+    lat: number
+    lon: number
+    ns: number
+    pageid: number
+    primary: string
+    title: string
+}
 
 export const wikimediaQueryBound = async (bounds: any, limit = 5000) => {
     return await wikimediaQuery(bounds.getNorthEast(), bounds.getSouthWest(), limit)
 }
 
-export const wikimediaQuery = async (northEast: { lat: number; lng: number; }, southWest: { lat: number; lng: number; }, limit = 100) => {
-    const r = 'https://commons.wikimedia.org/w/api.php'
-    const q = `${r}?action=query&list=geosearch&gsbbox=${northEast.lat}%7C${southWest.lng}%7C${southWest.lat}%7C${northEast.lng}&gsnamespace=6&gslimit=${limit}&format=json&origin=*`
+export const wikimediaQuery = async (
+    northEast: { lat: number; lng: number },
+    southWest: { lat: number; lng: number },
+    limit = 100
+) => {
+    const q = `${WIKI_COMMONS}?action=query&list=geosearch&gsbbox=${northEast.lat}%7C${southWest.lng}%7C${southWest.lat}%7C${northEast.lng}&gsnamespace=6&gslimit=${limit}&format=json&origin=*`
     const res = await fetch(q)
     const d = await res.json()
     if (d.error) {
@@ -170,21 +223,82 @@ export const wikimediaQuery = async (northEast: { lat: number; lng: number; }, s
     }
 }
 
-
 /*
  * https://www.mediawiki.org/wiki/API:Imageinfo
+ *
+ * Consider using `wikimediaGetThumb` instead
  */
-export const wikimediaInfoMultiplePages = async (pageids: number[], thumbWidth = 600) => {
+export const wikimediaGetThumbs = async (pageids: number[], orientation: 'height' | 'width', value = 600) => {
+    value = Math.floor(value)
     const pageidsStr = pageids.join('|')
-    const r = 'https://commons.wikimedia.org/w/api.php'
-    const q = `${r}?action=query&pageids=${pageidsStr}&prop=imageinfo&iiprop=extmetadata|url&iiurlwidth=${thumbWidth}&format=json&origin=*`
+    const q = `${WIKI_COMMONS}?action=query&pageids=${pageidsStr}&prop=imageinfo&iiprop=extmetadata|url&iiurl${orientation}=${value}&format=json&origin=*`
     const res = await fetch(q)
     const d = await res.json()
     return d.query.pages
 }
 
+/**
+ * @deprecated use wikimediaGetThumbs instead
+ */
+export const wikimediaInfoMultiplePages = wikimediaGetThumbs
+
+export interface WikimediaThumb {
+    pageid: number
+    objectname: string
+    thumbheight: number
+    thumburl: string
+    thumbwidth: number
+    descriptionurl: string
+    descriptionshorturl: string
+    responsiveUrls: { [key: number]: string }[]
+    url: string
+    artist: string
+    categories: string
+    datetimeoriginal: string
+    datetime: string
+    date: string
+    gpslatitude: number
+    gpslongitude: number
+    gpsmapdatum: string
+    imagedescription: string
+    license: string
+    licenseshortname: string
+    licenseurl: string
+}
+
+/**
+ * Get a thumbnail from wikimedia commons which has a height and width less than the given values.
+ *
+ * ```
+ * const { height, width } = document.getElementById('my-div').getBoundingClientRect()
+ * const { thumburl } = await wikimediaGetThumb(pic.pageid, height, width)
+ * ```
+ *
+ * @param pageid wikimedia commons pageid
+ * @param height max height of the thumbnail
+ * @param width max width of the thumbnail
+ * @returns
+ */
+export const wikimediaGetThumb = async (pageid: number, height: number, width: number) => {
+    const format = (thumbRawArray: any) => {
+        const { title, imageinfo } = thumbRawArray[pageid]
+        const info = imageinfo[0]
+        const result = { pageid, title, ...info } as { [key: string]: any }
+        Object.keys(info.extmetadata).forEach((key: string) => {
+            result[key.toLowerCase()] = info.extmetadata[key].value
+        })
+        return result as WikimediaThumb
+    }
+    const thumbWidth = format(await wikimediaGetThumbs([pageid], 'width', width))
+    if (thumbWidth.thumbheight > height) {
+        const thumbHeight = format(await wikimediaGetThumbs([pageid], 'height', height))
+        return thumbHeight
+    }
+    return thumbWidth
+}
+
 export const wikimediaGetAuthor = async (title: string, pageid: number) => {
-    const res = await fetch(`https://commons.wikimedia.org/w/api.php?action=query&titles=${title}&prop=imageinfo&format=json&origin=*`)
+    const res = await fetch(`${WIKI_COMMONS}?action=query&titles=${title}&prop=imageinfo&format=json&origin=*`)
     const d = await res.json()
     return d.query.pages[pageid].imageinfo[0].user
 }
@@ -194,10 +308,10 @@ export const wikimediaGetAuthorLink = (name: string, limit = 40) => {
 }
 
 /*
- *
+ * @deprecated use wikimediaGetThumb instead
  */
 export const wikimediaInfo = async (pageid: number, thumbWidth = 600) => {
-    const infos = await wikimediaInfoMultiplePages([pageid], thumbWidth)
+    const infos = await wikimediaGetThumbs([pageid], 'width', thumbWidth)
     const info = infos[pageid].imageinfo[0]
     const name = info.extmetadata.ObjectName.value
     const date = info.extmetadata.DateTime.value
@@ -216,22 +330,26 @@ const getLang = () => {
     return window?.navigator?.language?.split('-')?.at(0) || 'en'
 }
 
-
 /**
  * Get the picture of the day from wikimedia commons.
- * 
+ *
  * Leave lang empty to use the browser language. Set it to 'en' for example to force english.
  * You will have to set the lang if you use nodejs.
  */
 export const wikimediaPicOfTheDay = async (lang = '') => {
-    if (!lang) { lang = getLang() }
-    const url = `https://commons.wikimedia.org/w/api.php?action=featuredfeed&feed=potd&feedformat=atom&language=${lang}&origin=*`
+    if (!lang) {
+        lang = getLang()
+    }
+    const url = `${WIKI_COMMONS}?action=featuredfeed&feed=potd&feedformat=atom&language=${lang}&origin=*`
     const match1 = 'href="https://commons.wikimedia.org/wiki/Special'
     const match2 = 'typeof="mw:File"'
     const raw = await fetch(url)
-    const text = await raw.text();
+    const text = await raw.text()
     // const xml = new window.DOMParser().parseFromString(text, 'text/xml'); // doesn't work for nodejs
-    const urls = text.split(/\n/).filter(l => l.includes(match1)).map(l => l.split(/"/)[5])
+    const urls = text
+        .split(/\n/)
+        .filter((l) => l.includes(match1))
+        .map((l) => l.split(/"/)[5])
     return urls
     /*
     const lastUrl = urls.slice(-1)[0]
@@ -242,4 +360,4 @@ export const wikimediaPicOfTheDay = async (lang = '') => {
     const picName = picUrl[0].slice(11)
     return picName;
     */
-};
+}
