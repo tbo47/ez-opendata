@@ -244,6 +244,9 @@ export const wikimediaInfoMultiplePages = wikimediaGetThumbs
 
 export interface WikimediaThumb {
     pageid: number
+    /**
+     * Unique identifier of the file. It is the title of the file without the namespace prefix.
+     */
     objectname: string
     thumbheight: number
     thumburl: string
@@ -252,8 +255,22 @@ export interface WikimediaThumb {
     descriptionshorturl: string
     responsiveUrls: { [key: number]: string }[]
     url: string
+    /**
+     * Unique identifier of the artist.
+     */
     artist: string
+    /**
+     * Url to the artist latest pictures.
+     */
+    artistUrl: string
+    /**
+     * Url to the artist profile page in html format.
+     */
+    artistPage: string
     categories: string
+    /**
+     * Ex: "2021-03-22 10:33:40"
+     */
     datetimeoriginal: string
     datetime: string
     date: string
@@ -287,6 +304,9 @@ export const wikimediaGetThumb = async (pageid: number, height: number, width: n
         Object.keys(info.extmetadata).forEach((key: string) => {
             result[key.toLowerCase()] = info.extmetadata[key].value
         })
+        result.artistPage = result.artist
+        result.artist = result.artist?.replace(/<a.*?>(.*?)<\/a>/, '$1') // remove <a ... >Riamorei</a> -> Riamorei
+        result.artistUrl = wikimediaGetAuthorLink(result.artist)
         return result as WikimediaThumb
     }
     const thumbWidth = format(await wikimediaGetThumbs([pageid], 'width', width))
@@ -307,7 +327,7 @@ export const wikimediaGetAuthorLink = (name: string, limit = 40) => {
     return `https://commons.wikimedia.org/wiki/Special:ListFiles?limit=${limit}&user=${name}`
 }
 
-/*
+/**
  * @deprecated use wikimediaGetThumb instead
  */
 export const wikimediaInfo = async (pageid: number, thumbWidth = 600) => {
