@@ -60,8 +60,18 @@ const { thumburl } = await wikimediaGetThumb(pageid, height, width)
 
 ### Wikipedia
 
-Demo here: https://tbo47.github.io/wikipedia/
+Query wikipedia REST endpoint.
+
+Demo here: https://tbo47.github.io/wikipedia/ or https://jsfiddle.net/tbo47/csfjyd4x/13/
 
 ```javascript
- const articles = wikipediaQuery(14.7, -17.4) // lattitude longitude
+ const articles = wikipediaQuery(14.7, -17.4) // latitude longitude
 ```
+
+
+### Wikidata
+
+Query wikidata REST endpoint.
+
+https://tbo47.github.io/wikidata/ or 
+https://jsfiddle.net/tbo47/1z2kbuaf/
