@@ -49,7 +49,7 @@ const southWest = { lat: 14.67, lng: -17.47 };
 const images = await wikimediaQuery(northEast, southWest);
 ```
 
-Get a thumb which fits in a 100px by 100px box:
+Get a thumb which fits in a 100px by 100px box. Demo here: https://jsfiddle.net/tbo47/6b7j2ohy/
 ```javascript
 const pageId = 21900832
 const height = 100 
@@ -57,13 +57,7 @@ const with = 100
 const { thumburl } = await wikimediaGetThumb(pageid, height, width)
 ```
 
-Get a thumb to fit in a <div> element:
-```javascript
-const pageId = 21900832
-const { height, width } = document.getElementById('my-div').getBoundingClientRect()
-const { thumburl } = await wikimediaGetThumb(pageid, height, width)
-```
-
+https://jsfiddle.net/tbo47/6b7j2ohy/
 
 ### Wikipedia
 
