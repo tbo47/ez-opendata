@@ -1,25 +1,25 @@
 {
-  "name": "ez-opendata",
-  "version": "1.1.2",
-  "description": "Wrap open-data sources (wikipedia, openstreetmap, wikimedia, etc...) calls in simple javascript functions.",
-  "main": "index.js",
-  "scripts": {
-    "dev": "tsc --build tsconfig.json --declaration --watch",
-    "prepublishOnly": "npm test && tsc --build tsconfig.json --declaration",
-    "test_dev": "rm -f index.js; tsc --build tsconfig.test.json --watch ; rm index.js",
-    "test": "rm -f index.js; tsc --build tsconfig.test.json && node test.mjs ; rm index.js"
-  },
-  "keywords": [
-    "wikipedia",
-    "opensteetmap",
-    "wikimedia"
-  ],
-  "files": [
-    "index.d.ts"
-  ],
-  "author": "tbo47",
-  "license": "MIT",
-  "devDependencies": {
-    "typescript": "^5.2.2"
-  }
+    "name": "ez-opendata",
+    "version": "1.1.2",
+    "description": "Wrap open-data sources (wikipedia, openstreetmap, wikimedia commons, etc...) calls in simple javascript functions.",
+    "main": "index.js",
+    "scripts": {
+        "dev": "tsc --build tsconfig.json --declaration --watch",
+        "prepublishOnly": "npm test && tsc --build tsconfig.json --declaration",
+        "test_dev": "rm -f index.js; tsc --build tsconfig.test.json --watch ; rm index.js",
+        "test": "rm -f index.js; tsc --build tsconfig.test.json && node test.mjs ; rm index.js"
+    },
+    "keywords": [
+        "wikipedia",
+        "opensteetmap",
+        "wikimedia"
+    ],
+    "files": [
+        "index.d.ts"
+    ],
+    "author": "tbo47",
+    "license": "MIT",
+    "devDependencies": {
+        "typescript": "^5.2.2"
+    }
 }
