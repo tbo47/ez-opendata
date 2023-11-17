@@ -6,24 +6,57 @@
 export const WIKI_COMMONS = 'https://commons.wikimedia.org/w/api.php'
 
 export interface OpenstreetmapPoi {
-    members: any
-    type: any
-    website: any
+    cuisine?: string
+    'contact:website'?: string
+    id: number
+    lat: number
+    lon: number
+    members?: 'relation' | string
     osm_url: string
-    id: any
     osm_url_edit: string
+    source: 'survey' | string
     tags?: any
+    type: 'node' | 'way' | string
+    website?: string
     [key: string]: any
+}
+
+export const OSM_CATEGORIES = {
+    sustenance: [
+        ['amenity', 'bar'],
+        ['amenity', 'biergarten'],
+        ['amenity', 'cafe'],
+        ['amenity', 'restaurant'],
+        ['amenity', 'fast_food'],
+        ['amenity', 'food_court'],
+        ['amenity', 'ice_cream'],
+    ],
+    food: [
+        ['amenity', 'cafe'],
+        ['amenity', 'restaurant'],
+        ['shop', 'deli'],
+        ['amenity', 'ice_cream'],
+        ['amenity', 'fast_food'],
+    ],
+    leisure: [
+        ['leisure', 'park'],
+        ['leisure', 'swimming_pool'],
+    ],
 }
 
 /**
  * Query an openstreetmap server to fetch POIs
  *
- * @param {*} bbox the rectangle where to perform the query
- * @param {Array.<Array>} categories of pois. Like restaurant, cafe...
- * @returns Promise<Poi[]>
+ * https://wiki.openstreetmap.org/wiki/Key:amenity#Values
+ *
+ * @param bbox the rectangle where to perform the query
+ * @param categories of pois. Like restaurant, cafe...
  */
-export const openstreetmapGetPOIs = async (bbox: string, categories: any[]) => {
+export const openstreetmapGetPOIs = async (
+    bbox = '37.8,-122.3,37.8,-122.2',
+    categories = OSM_CATEGORIES.sustenance,
+    timeout = 25_000
+) => {
     const url = 'https://overpass-api.de/api/interpreter'
 
     let quest = ''
@@ -44,7 +77,7 @@ export const openstreetmapGetPOIs = async (bbox: string, categories: any[]) => {
         >;
         out skel qt;`
 
-    const response = await fetch(url, { method: 'POST', body })
+    const response = await fetch(url, { method: 'POST', body, timeout } as RequestInit)
     const data = await response.json()
     return data.elements
         .filter((p: any) => p.tags)
@@ -62,16 +95,34 @@ export const openstreetmapGetPOIs = async (bbox: string, categories: any[]) => {
 }
 
 /**
- *
- * @returns Promise<POI[]> restaurants and cafes
+ * Useful to get POIs around a given location if you are using leaflet.
+ * ```
+ * const { _northEast, _southWest } = map.getBounds() // leaflet map
+ * openstreetmapGetPOIsBbox({ _northEast, _southWest }, OSM_CATEGORIES.food)
+ * ```
  */
-export const openstreetmapGetRestaurants = () => {
-    return openstreetmapGetPOIs('37.8,-122.3,37.8,-122.2', [
-        { key: 'amenity', value: 'cafe' },
-        { key: 'amenity', value: 'restaurant' },
-    ])
+export const openstreetmapGetPOIsBbox = async (
+    {
+        _northEast,
+        _southWest,
+    }: {
+        _northEast: { lat: number; lng: number }
+        _southWest: { lat: number; lng: number }
+    },
+    categories = OSM_CATEGORIES.food
+) => {
+    const bbox = []
+    bbox.push(_southWest.lat)
+    bbox.push(_southWest.lng)
+    bbox.push(_northEast.lat)
+    bbox.push(_northEast.lng)
+    const pois = await openstreetmapGetPOIs(bbox.join(','), categories)
+    return pois
 }
 
+/**
+ * @deprecated use openstreetmapGetPOIbbox({ _northEast, _southWest }, CATEGORIES.food)
+ */
 export const getFoodShops = async ({
     _northEast,
     _southWest,
@@ -79,25 +130,19 @@ export const getFoodShops = async ({
     _northEast: { lat: number; lng: number }
     _southWest: { lat: number; lng: number }
 }) => {
-    const bbox = []
-    bbox.push(_southWest.lat)
-    bbox.push(_southWest.lng)
-    bbox.push(_northEast.lat)
-    bbox.push(_northEast.lng)
-    let categories = [
-        ['amenity', 'cafe'],
-        ['amenity', 'restaurant'],
-        ['shop', 'deli'],
-        ['amenity', 'ice_cream'],
-        ['amenity', 'fast_food'],
-    ]
-    // categories = [['leisure', 'park'], ['leisure', 'swimming_pool']]
-    const pois = await openstreetmapGetPOIs(bbox.join(','), categories)
-    return pois
+    return openstreetmapGetPOIsBbox({ _northEast, _southWest }, OSM_CATEGORIES.food)
 }
 
-// extract diets from POIs (only makes sense for restaurants)
+/**
+ * @deprecated use openstreetmapGetRestaurants instead
+ */
 export const extractDiets = (pois: OpenstreetmapPoi[]) => {
+    return openstreetmapExtractDiets(pois)
+}
+/**
+ * extract diets from POIs (only makes sense for restaurants)
+ */
+export const openstreetmapExtractDiets = (pois: OpenstreetmapPoi[]) => {
     const dietsMap = new Map<string, number>() // stores ['thai': 3] if thai restaurants have been seen 3 times
     pois.forEach((poi) => {
         const diets = new Set<string>()
@@ -237,7 +282,7 @@ export const wikimediaGetThumbs = async (pageids: number[], orientation: 'height
     const q = `${WIKI_COMMONS}?action=query&pageids=${pageidsStr}&prop=imageinfo&iiprop=extmetadata|url&iiurl${orientation}=${value}&format=json&origin=*`
     const res = await fetch(q)
     const d = await res.json()
-    return d.query.pages
+    return d.query.pages as { [key: number]: { imageinfo: any; title: string; pageid: number; [key: string]: any } }
 }
 
 /**
