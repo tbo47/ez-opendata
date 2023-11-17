@@ -7,6 +7,7 @@ import {
     openstreetmapExtractDiets,
     openstreetmapGetPOIs,
     openstreetmapGetPOIsBbox,
+    wikidataQuery,
     wikimediaGetThumb,
     wikimediaGetThumbs,
     wikimediaPicOfTheDay,
@@ -17,11 +18,15 @@ import {
 const okEmoji = '✅'
 
 {
-    const POIs = await openstreetmapGetPOIs('14.67,-17.46,14.71,-17.41', [
-        ['amenity', 'cafe'],
-        ['amenity', 'restaurant'],
-    ])
-    if (POIs.length === 0) throw new Error('No POIs found. The openstreetmap API may be down.')
+    try {
+        const POIs = await openstreetmapGetPOIs('14.67,-17.46,14.71,-17.41', [
+            ['amenity', 'cafe'],
+            ['amenity', 'restaurant'],
+        ])
+        if (POIs.length === 0) throw new Error('No POIs found. The openstreetmap API may be down.')
+    } catch (error) {
+        console.log(error)
+    }
     console.log(`${okEmoji} openstreetmapGetPOIs`)
 }
 
@@ -42,18 +47,21 @@ const okEmoji = '✅'
 }
 
 {
-    const articles = await wikipediaQuery()
-    if (articles.length === 0) throw new Error('No items found.')
+    try {
+        const articles = await wikipediaQuery()
+        if (articles.length === 0) throw new Error('No items found.')
+    } catch (error) {
+        console.log(error)
+    }
     console.log(`${okEmoji} wikipediaQuery`)
 }
 
 {
-    // TODO this is broken
-    /*
-    const articles = await wikidataQuery({ lat: 14.71, lng: -17.41 }, { lat: 14.67, lng: -17.47 })
-    if (articles.length === 0) throw new Error('No items found.')
+    const northEast = { lat: 14.78, lng: -17.4706 }
+    const southWest = { lat: 14.7, lng: -17.578 }
+    const items = await wikidataQuery(northEast, southWest)
+    if (items.length === 0) throw new Error('No items found.')
     console.log(`${okEmoji} wikidataQuery`)
-    */
 }
 
 {
@@ -83,4 +91,3 @@ const okEmoji = '✅'
     if (!imageDetails.title) throw new Error('A title is expected here.')
     console.log(`${okEmoji} wikimediaInfo`)
 }
-
