@@ -360,6 +360,8 @@ export const wikimediaGetThumb = async (pageid: number, height: number, width: n
         result.artist = result.artist?.replace(/<a.*?>(.*?)<\/a>/, '$1') // remove <a ... >Riamorei</a> -> Riamorei
         result.artistUrl = wikimediaGetAuthorLink(result.artist)
         result.atomicUrl = `https://commons.wikimedia.org/w/index.php?curid=${pageid}`
+        result.gpslongitude = parseFloat(result.gpslongitude)
+        result.gpslatitude = parseFloat(result.gpslatitude)
         return result as WikimediaThumb
     }
     const thumbWidth = format(await wikimediaGetThumbs([pageid], 'width', width))
