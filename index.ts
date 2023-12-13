@@ -417,7 +417,7 @@ export const wikimediaPicOfTheDay = async (lang = '') => {
     }
     const url = `${WIKI_COMMONS}?action=featuredfeed&feed=potd&feedformat=atom&language=${lang}&origin=*`
     const match1 = 'href="https://commons.wikimedia.org/wiki/Special'
-    const match2 = 'typeof="mw:File"'
+    // const match2 = 'typeof="mw:File"'
     const raw = await fetch(url)
     const text = await raw.text()
     // const xml = new window.DOMParser().parseFromString(text, 'text/xml'); // doesn't work for nodejs
