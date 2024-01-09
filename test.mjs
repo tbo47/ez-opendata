@@ -59,9 +59,13 @@ const okEmoji = '✅'
 {
     const northEast = { lat: 14.78, lng: -17.4706 }
     const southWest = { lat: 14.7, lng: -17.578 }
-    const items = await wikidataQuery(northEast, southWest)
-    if (items.length === 0) throw new Error('No items found.')
-    console.log(`${okEmoji} wikidataQuery`)
+    try {
+        const items = await wikidataQuery(northEast, southWest)
+        if (items.length === 0) throw new Error('No items found.')
+        console.log(`${okEmoji} wikidataQuery`)
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 {

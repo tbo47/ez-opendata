@@ -12,6 +12,8 @@
 `ez-opendata` is a set of ez (easy) to use javascript functions to call open-data sources such as openstreetmap, wikipedia or wikimedia.
 It is tiny and has no dependencies.
 
+`ez-opendata`` is the foundation for [picsaroundme](https://picsaroundme.com/).
+
 It can work for javascript and/or typescript projects on the browser or with nodejs.
 
 You can sponsor this library at [GitHub Sponsors](https://github.com/sponsors/tbo47).
@@ -39,9 +41,6 @@ const cafeAndRestaurants = await openstreetmapGetPOIs(
 ```
 
 ### Wikimedia Commons 
-
-
-ez-opendata is the foundation for [picsaroundme](https://picsaroundme.com/)
 
 Demo here: https://tbo47.github.io/wikimedia/ or https://jsfiddle.net/tbo47/hyrn2vc0/
 
