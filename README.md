@@ -1,10 +1,6 @@
 <p align="center">
-  <a href="https://www.npmjs.com/ez-opendata">
-    <img src="https://img.shields.io/npm/v/ez-opendata.svg?logo=npm&logoColor=fff&label=NPM+package&color=limegreen" alt="ez-opendata on npm" />
-  </a>&nbsp;
-  <a href="https://www.npmjs.com/ez-opendata">
-    <img src="https://img.shields.io/npm/dw/ez-opendata.svg?logo=npm&logoColor=fff&label=NPM+package&color=limegreen" alt="ez-opendata on npm" />
-  </a>&nbsp;
+  <a href="https://www.npmjs.com/ez-opendata"><img src="https://img.shields.io/npm/v/ez-opendata.svg?logo=npm&logoColor=fff&label=NPM+package&color=limegreen" alt="ez-opendata on npm" /></a>&nbsp;
+  <a href="https://www.npmjs.com/ez-opendata"><img src="https://img.shields.io/npm/dw/ez-opendata.svg?logo=npm&logoColor=fff&label=NPM+package&color=limegreen" alt="ez-opendata on npm" /></a>&nbsp;
 </p>
 
 # Getting Started with ez-opendata
