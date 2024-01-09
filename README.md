@@ -8,7 +8,7 @@
 `ez-opendata` is a set of ez (easy) to use javascript functions to call open-data sources such as openstreetmap, wikipedia or wikimedia.
 It is tiny and has no dependencies.
 
-`ez-opendata`` is the foundation for [picsaroundme](https://picsaroundme.com/).
+`ez-opendata` is the foundation for [picsaroundme](https://picsaroundme.com/).
 
 It can work for javascript and/or typescript projects on the browser or with nodejs.
 
