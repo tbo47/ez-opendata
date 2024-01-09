@@ -24,7 +24,6 @@ If you just want to give it a quick try on your typescript project, just copy an
 
 ## Examples
 
-Only basic examples are shown here. Read [test.mjs](./test.mjs) to see more advanced examples.
 ### Openstreetmap
 
 Demo here: https://tbo47.github.io/poi/ or https://jsfiddle.net/tbo47/qsuy92ht/
@@ -40,6 +39,9 @@ const cafeAndRestaurants = await openstreetmapGetPOIs(
 ```
 
 ### Wikimedia Commons 
+
+
+ez-opendata is the foundation for [picsaroundme](https://picsaroundme.com/)
 
 Demo here: https://tbo47.github.io/wikimedia/ or https://jsfiddle.net/tbo47/hyrn2vc0/
 
