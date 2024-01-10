@@ -12,7 +12,7 @@ It is tiny and has no dependencies.
 
 It can work for javascript and/or typescript projects on the browser or with nodejs.
 
-You can sponsor this library at [GitHub Sponsors](https://github.com/sponsors/tbo47).
+You can sponsor me at [GitHub Sponsors](https://github.com/sponsors/tbo47). Or know [more about me here](https://tbo47.github.io/).
 
 ## Install
 
