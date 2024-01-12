@@ -345,11 +345,19 @@ export interface WikimediaThumb {
 }
 
 /**
- * Get a thumbnail from wikimedia commons which has a height and width less than the given values.
+ * Get a thumbnail from wikimedia commons which fits into the frame defines by the height and the width.
+ * The thumbnail is going to fit into the frame, so it might be smaller than the frame.
  *
+ * In this example, the thumbnail will fit into the div:
  * ```
  * const { height, width } = document.getElementById('my-div').getBoundingClientRect()
  * const { thumburl } = await wikimediaGetThumb(pic.pageid, height, width)
+ * ```
+ *
+ * In this example, the thumbnail will fit the cellphone width but never exeed 2/3 of the height:
+ * ```
+ * const { height, width } = document.body.getBoundingClientRect()
+ * const { thumburl } = await wikimediaGetThumb(pic.pageid, height * 0.66, width)
  * ```
  *
  * @param pageid wikimedia commons pageid
