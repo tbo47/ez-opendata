@@ -1,6 +1,6 @@
 {
     "name": "ez-opendata",
-    "version": "1.1.4",
+    "version": "1.1.5",
     "description": "Wrap open-data sources (wikipedia, openstreetmap, wikimedia commons, etc...) calls in simple javascript functions.",
     "main": "index.js",
     "scripts": {
