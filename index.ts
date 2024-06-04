@@ -167,6 +167,17 @@ export const openstreetmapExtractDiets = (pois: OpenstreetmapPoi[]) => {
     return dietsSorted
 }
 
+/**
+ * Geocode a location using openstreetmap.
+ * https://nominatim.org/release-docs/develop/api/Search/
+ */
+export const openstreetmapGeocoding = async (q: string, limit = 10) => {
+    const url = `https://nominatim.openstreetmap.org/search?addressdetails=1&q=${q}&format=jsonv2&limit=${limit}`
+    const raw = await fetch(url, OPTIONS_WITH_USER_AGENT)
+    const json = await raw.json()
+    return json
+}
+
 export interface WikipediaArticle {
     title: string
     lat: number

@@ -5,6 +5,7 @@
  */
 import {
     openstreetmapExtractDiets,
+    openstreetmapGeocoding,
     openstreetmapGetPOIs,
     openstreetmapGetPOIsBbox,
     wikidataQuery,
@@ -16,6 +17,17 @@ import {
 } from './index.js'
 
 const okEmoji = '✅'
+
+{
+    try {
+        const res = await openstreetmapGeocoding('20 rue du Faubourg Saint-Antoine, 75012 Paris')
+        console.log(res)
+    } catch (error) {
+        console.log(error)
+    }
+    console.log(`${okEmoji} openstreetmapGeocoding`)
+    process.exit()
+}
 
 {
     try {
