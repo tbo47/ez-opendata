@@ -12,13 +12,9 @@ It can work for javascript and/or typescript projects on the browser or with nod
 
 `ez-opendata` is the foundation for [picsaroundme](https://picsaroundme.com/).
 
-You can sponsor me at [GitHub Sponsors](https://github.com/sponsors/tbo47). Or know [more about me here](https://tbo47.github.io/).
-
 ## Install
 
-`npm install --save ez-opendata`
-
-If you just want to give it a quick try on your typescript project, just copy and paste `index.ts` in your project and rename it `ez-opendata.ts`.
+`npm install ez-opendata`
 
 ## Examples
 
