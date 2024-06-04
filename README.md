@@ -29,7 +29,7 @@ const cafeAndRestaurants = await openstreetmapGetPOIs('14.67,-17.46,14.71,-17.41
 ])
 ```
 
-Use openstreetmap nominatim to fetch coordonates of a place. Demo https://jsfiddle.net/tbo47/xv0g3s59/
+Use [openstreetmap nominatim](https://nominatim.org/release-docs/develop/api/Search/) to fetch coordonates of a place. Demo https://jsfiddle.net/tbo47/xv0g3s59/
 
 ```javascript
 const res = await openstreetmapGeocoding('20 rue du Faubourg Saint-Antoine, 75012 Paris')
