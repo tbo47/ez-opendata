@@ -20,7 +20,7 @@ It can work for javascript and/or typescript projects on the browser or with nod
 
 ### Openstreetmap
 
-Demo here: https://tbo47.github.io/poi/ or https://jsfiddle.net/tbo47/qsuy92ht/
+See restaurants around: [demo](https://tbo47.github.io/poi/) or [code demo](https://jsfiddle.net/tbo47/qsuy92ht/)
 
 ```javascript
 const cafeAndRestaurants = await openstreetmapGetPOIs('14.67,-17.46,14.71,-17.41', [
@@ -29,7 +29,7 @@ const cafeAndRestaurants = await openstreetmapGetPOIs('14.67,-17.46,14.71,-17.41
 ])
 ```
 
-Use [openstreetmap nominatim](https://nominatim.org/release-docs/develop/api/Search/) to fetch coordonates of a place. Demo https://jsfiddle.net/tbo47/xv0g3s59/
+Use [openstreetmap nominatim](https://nominatim.org/release-docs/develop/api/Search/) to fetch coordonates of a place. [Demo](https://jsfiddle.net/tbo47/xv0g3s59/)
 
 ```javascript
 const res = await openstreetmapGeocoding('20 rue du Faubourg Saint-Antoine, 75012 Paris')
@@ -38,7 +38,7 @@ const { lat, lng } = res.at(0)
 
 ### Wikimedia Commons
 
-Demo here: https://tbo47.github.io/wikimedia/ or https://jsfiddle.net/tbo47/hyrn2vc0/
+Query pictures in an area: [demo](https://tbo47.github.io/wikimedia/) or [code demo](https://jsfiddle.net/tbo47/hyrn2vc0/)
 
 ```javascript
 const northEast = { lat: 14.71, lng: -17.41 }
@@ -46,7 +46,7 @@ const southWest = { lat: 14.67, lng: -17.47 }
 const images = await wikimediaQuery(northEast, southWest)
 ```
 
-Get a custom thumb image. Demo here: https://jsfiddle.net/tbo47/6b7j2ohy/
+Get a custom thumb image: [demo](https://jsfiddle.net/tbo47/6b7j2ohy/)
 
 ```javascript
 const pageId = 21900832
@@ -57,9 +57,7 @@ const { thumburl } = await wikimediaGetThumb(pageid, height, width)
 
 ### Wikipedia
 
-Query wikipedia REST endpoint.
-
-Demo here: https://tbo47.github.io/wikipedia/ or https://jsfiddle.net/tbo47/csfjyd4x/13/
+Get wikipedia articles in an area: [demo](https://tbo47.github.io/wikipedia/) or [code demo](https://jsfiddle.net/tbo47/csfjyd4x/13/)
 
 ```javascript
 const articles = wikipediaQuery(14.7, -17.4) // latitude longitude
@@ -67,7 +65,5 @@ const articles = wikipediaQuery(14.7, -17.4) // latitude longitude
 
 ### Wikidata
 
-Query wikidata REST endpoint.
-
-https://tbo47.github.io/wikidata/ or
-https://jsfiddle.net/tbo47/1z2kbuaf/
+Query wikidata REST endpoint: [demo](https://tbo47.github.io/wikidata/) or
+[code demo](https://jsfiddle.net/tbo47/1z2kbuaf/)
