@@ -10,8 +10,6 @@ It is tiny and has no dependencies.
 
 It can work for javascript and/or typescript projects on the browser or with nodejs.
 
-`ez-opendata` is the foundation for [picsaroundme](https://picsaroundme.com/).
-
 ## Install
 
 `npm install ez-opendata`
@@ -20,7 +18,7 @@ It can work for javascript and/or typescript projects on the browser or with nod
 
 ### Openstreetmap
 
-See restaurants around: [demo](https://tbo47.github.io/poi/) or [code demo](https://jsfiddle.net/tbo47/qsuy92ht/)
+See restaurants in an area: [demo](https://tbo47.github.io/poi/) or [code demo](https://jsfiddle.net/tbo47/qsuy92ht/)
 
 ```javascript
 const cafeAndRestaurants = await openstreetmapGetPOIs('14.67,-17.46,14.71,-17.41', [
@@ -29,7 +27,7 @@ const cafeAndRestaurants = await openstreetmapGetPOIs('14.67,-17.46,14.71,-17.41
 ])
 ```
 
-Use [openstreetmap nominatim](https://nominatim.org/release-docs/develop/api/Search/) to fetch coordonates of a place. [Demo](https://jsfiddle.net/tbo47/xv0g3s59/)
+Use [openstreetmap nominatim](https://nominatim.org/release-docs/develop/api/Search/) to fetch coordonates of a place: [demo](https://jsfiddle.net/tbo47/xv0g3s59/)
 
 ```javascript
 const res = await openstreetmapGeocoding('20 rue du Faubourg Saint-Antoine, 75012 Paris')

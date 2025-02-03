@@ -2,3 +2,5 @@ package-lock.json
 index.js
 index.d.ts
 node_modules/
+tsconfig.test
+tsconfig.tsbuildinfo

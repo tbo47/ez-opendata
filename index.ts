@@ -167,15 +167,44 @@ export const openstreetmapExtractDiets = (pois: OpenstreetmapPoi[]) => {
     return dietsSorted
 }
 
+export interface OpenstreetmapAddress {
+    address: {
+        'ISO3166-2-lvl4': string
+        country: string
+        country_code: string
+        healthcare: string
+        house_number: string
+        municipality: string
+        postcode: string
+        road: string
+        state: string
+        town: string
+    }
+    addresstype: 'healthcare' | string
+    boundingbox: [string, string, string, string]
+    category: 'healthcare' | string
+    display_name: string
+    importance: number
+    lat: string
+    licence: string
+    lon: string
+    name: string
+    osm_id: number
+    osm_type: 'node' | 'way' | 'relation' | 'polygon' | string
+    place_id: number
+    place_rank: number
+    type: 'physiotherapist' | string
+}
+
 /**
  * Geocode a location using openstreetmap.
- * https://nominatim.org/release-docs/develop/api/Search/
+ * https://nominatim.org/release-docs/latest/api/Search/
  */
 export const openstreetmapGeocoding = async (q: string, limit = 10) => {
     const url = `https://nominatim.openstreetmap.org/search?addressdetails=1&q=${q}&format=jsonv2&limit=${limit}`
     const raw = await fetch(url, OPTIONS_WITH_USER_AGENT)
     const json = await raw.json()
-    return json
+    return json as OpenstreetmapAddress[]
 }
 
 export interface WikipediaArticle {
