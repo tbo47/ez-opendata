@@ -1,6 +1,6 @@
 {
     "name": "ez-opendata",
-    "version": "1.1.6",
+    "version": "1.1.7",
     "description": "Wrap open-data sources (wikipedia, openstreetmap, wikimedia commons, etc...) calls in simple javascript functions.",
     "main": "index.js",
     "scripts": {
@@ -20,6 +20,6 @@
     "author": "tbo47",
     "license": "MIT",
     "devDependencies": {
-        "typescript": "^5.4.5"
+        "typescript": "^5.7.3"
     }
 }

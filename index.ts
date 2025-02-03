@@ -169,10 +169,10 @@ export const openstreetmapExtractDiets = (pois: OpenstreetmapPoi[]) => {
 
 export interface OpenstreetmapAddress {
     address: {
+        [key: string]: string
         'ISO3166-2-lvl4': string
         country: string
         country_code: string
-        healthcare: string
         house_number: string
         municipality: string
         postcode: string
@@ -199,9 +199,27 @@ export interface OpenstreetmapAddress {
 /**
  * Geocode a location using openstreetmap.
  * https://nominatim.org/release-docs/latest/api/Search/
+ * @param q the query string
+ * @param limit the number of results
+ * @param viewbox the bounding box to search in. Ex: '-126.68,42.45,-108.04,32.05' for California
+ * @param bounded 0 or 1. If 1, restrict the results to only items contained within the bounding box.
  */
-export const openstreetmapGeocoding = async (q: string, limit = 10) => {
-    const url = `https://nominatim.openstreetmap.org/search?addressdetails=1&q=${q}&format=jsonv2&limit=${limit}`
+export const openstreetmapGeocoding = async (
+    q: string,
+    limit = 10,
+    viewbox: string | undefined = undefined,
+    bounded = 0
+) => {
+    const params = new URLSearchParams()
+    params.append('addressdetails', '1')
+    params.append('q', q)
+    params.append('format', 'jsonv2')
+    params.append('limit', limit.toString())
+    if (viewbox) {
+        params.append('viewbox', viewbox)
+        params.append('bounded', bounded.toString())
+    }
+    const url = `https://nominatim.openstreetmap.org/search?${params.toString()}`
     const raw = await fetch(url, OPTIONS_WITH_USER_AGENT)
     const json = await raw.json()
     return json as OpenstreetmapAddress[]
